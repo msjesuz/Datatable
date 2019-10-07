@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <title>Curso Javascript</title>
+  </head>
+  <body>
+    <div id="app">
+       <h3>Lista de Nomes</h3>
+      <ul></ul>
+      <input id="txtNome" />
+      <button id="btnAdicionar">Adicionar</button>
+    </div>
+    <script>
+      var nomes = ["Lucia", "Marcelo", "Jeová"];    
+
+      var inputElement = document.querySelector('#txtNome');
+      var btnAdicionarElement = document.querySelector('#btnAdicionar');
+      var listElement = document.querySelector('#app ul')
+      
+      var comboElement = document.querySelector('#app')
+      var select = document.createElement("select");
+      var linkElement = document.querySelector('#app')
+      var i = 0;
+
+      CarregarNomes();
+
+      function CarregarNomes(){
+        
+        listElement.innerHTML = '';
+
+        for(nome of nomes){
+          
+          var todoElement = document.createElement('li');
+          var todoText = document.createTextNode(nome); 
+         
+          var linkElement = document.createElement('a');
+          linkElement.setAttribute('href','#');
+          var linkText = document.createTextNode(' Excluir');
+
+          var pos = nomes.indexOf(nome);
+
+          linkElement.setAttribute('onclick', 'ExcluirNome('+ pos +')');
+
+          linkElement.appendChild(linkText);
+          todoElement.appendChild(todoText);
+          todoElement.appendChild(linkElement);
+          listElement.appendChild(todoElement);
+          
+        }
+      }
+
+      function Adicionar(){
+        
+        var todoText = inputElement.value;
+        nomes.push(todoText);
+        inputElement.value = '';
+        CarregarNomes();
+        CarregarCombo();
+      }
+    
+      function CarregarCombo(){
+        
+        select.innerHTML = '';
+
+        select.setAttribute("name", "selectNome");
+        select.setAttribute("id", "selectNome");
+        
+        var option = document.createElement("option");
+            option.setAttribute("value", i);
+            option.innerHTML = '- Selecionar nome -';
+        
+        select.appendChild(option);
+
+        for(nome of nomes){
+            option = document.createElement("option");
+            option.setAttribute("value", i++);
+            option.innerHTML = nome;
+            select.appendChild(option);
+        }
+        
+        comboElement.appendChild(select); 
+      }     
+
+      btnAdicionarElement.onclick = Adicionar;
+
+      function Selecionado(){
+        var todoSelecionado = select.options[select.selectedIndex].text;
+
+        if(select.selectedIndex != 0){
+          nomes.push(todoSelecionado);
+          select.selectedIndex = 0;
+          CarregarNomes();
+        }
+      }
+
+      comboElement.onclick = Selecionado;
+
+      function ExcluirNome(pos){
+        nomes.splice(pos, 1);
+        CarregarNomes();
+        CarregarCombo();
+      }
+
+      CarregarCombo();
+
+    </script>
+  </body>
+</html>

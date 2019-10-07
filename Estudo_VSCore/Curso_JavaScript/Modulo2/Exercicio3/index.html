@@ -1,0 +1,140 @@
+<!-- <!DOCTYPE HTML> -->
+<html lang=”pt-br”>
+    <meta charset="utf-8">
+        <head>
+          <title>Curso Javascript</title>
+          <script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+
+          <link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
+          <script type="text/javascript" src="js/datatables.min.js"></script>
+
+
+          <link rel="stylesheet" type="text/css" src="css/dataTables.bootstrap.min.css"/>
+
+          <link rel="stylesheet" type="text/scss" src="scss/common.scss"/>
+          <link rel="stylesheet" type="text/scss" src="scss/mixins.scss"/>
+           
+          <!-- <script type="text/javascript" language="javascript" src="js/dataTables.bootstrap.min.js" ></script> -->
+         
+          <script type="text/javascript" language="javascript" src="js/dataTables.buttons.min.js"></script>
+         
+          <script type="text/javascript" language="javascript" src="js/buttons.html5.min.js"></script>
+          <!-- <script type="text/javascript" language="javascript" src="js/buttons.flash.min.js"></script> -->
+          <script type="text/javascript" language="javascript" src="js/buttons.print.min.js"></script> 
+          <script type="text/javascript" language="javascript" src="js/buttons.colVis.min.js"></script> 
+
+          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+
+        </head>
+        <body>
+          <div id="relDepPessoal">            
+              <table id="example" class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Name</th>
+                          <th>Position</th>
+                          <th>Office</th>
+                          <th>Extn.</th>
+                          <th>Start date</th>
+                          <th>Salary</th>
+                      </tr>
+                  </thead>
+              </table>              
+          </div>
+
+          <script>
+              
+            $.fn.dataTable.Buttons.swfPath = 'swf/flashExport.swf';
+            $(document).ready(function() {
+                var printCounter = 0;
+
+                // 
+                //Anexar uma legenda à tabela antes da inicialização do DataTables
+                //$('#example').append('<caption style="caption-side: bottom">Uma empresa fictícia\'s tabela dos funcionários</caption>');
+                var table = $('#example').DataTable( {
+                    "sAjaxSource": "http://127.0.0.1:5500/Curso_JavaScript/Modulo2/Exercicio3/data.json",                    
+                    // "aoColumnDefs": [ {
+                    //         "aTargets": [3],
+                    //         "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                    //             if ( sData == "1.7" ) {
+                    //             $(nTd).css('color', 'blue')
+                    //             }
+                    //         }//,
+                    //         //"sClass": "my_class", "aTargets": [ 2 ] 
+                    //     } 
+                    // ],                    
+                    dom: 'Bfrtip', 
+                    "lengthMenu": [
+                        [10, 25, 50, -1],
+                        ['10 linhas', '25 linhas', '50 linhas', 'Mostrar todo']
+                    ],
+                    dom: 'Bfrtip',                   
+                    buttons: [       
+                    {
+                        extend: 'copyHtml5',
+                        text: 'Copiar'
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        //text: 'Planilha Excel'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        messageBottom: null
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Imprimir',
+                        messageTop: function () {
+                            printCounter++;
+        
+                            if ( printCounter === 1 ) {
+                                return 'Á primeira vez que você imprime este documento.';
+                            }
+                            else {
+                                return 'Você imprimiu este documento '+printCounter+' vezes';
+                            }
+                        },                        
+                        messageBottom: null
+                        },
+                        {
+                            extend: 'colvis',
+                            text: 'Selecionar coluna(s)'
+                        }, 
+                        'pageLength'
+                    ],
+                        "language": {
+                            "sEmptyTable": "Nenhum registro encontrado",
+                            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                            "sInfoPostFix": "",
+                            "sInfoThousands": ".",
+                            "sLengthMenu": "Resultados por página _MENU_ ",
+                            "sLoadingRecords": "Carregando...",
+                            "sProcessing": "Processando...",
+                            "sZeroRecords": "Nenhum registro foi encontrado",
+                            "sSearch": "Pesquisar",
+                            "oPaginate": {
+                                "sNext": "Próximo",
+                                "sPrevious": "Anterior",
+                                "sFirst": "Primeiro",
+                                "sLast": "Último"
+                            },
+                            "buttons": {
+                                "pageLength" : {"-1":"Mostrar todas as linhas",_:"Mostrar %d linhas"}
+                            },
+                            "oAria":{
+                                "sSortAscending":  "activate to sort column ascending",
+                                "sSortDescending": "activate to sort column descending"
+                            }
+                        }                           
+                    });
+                    
+                    table.buttons().container()
+                        .appendTo('#datatable_wrapper .col-md-6:eq(0)');                    
+                } );              
+          </script>
+        </body>
+</html>
